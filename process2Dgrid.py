@@ -8,6 +8,7 @@ from scipy import interpolate
 from matplotlib import patches as mpatches
 from pathlib import Path
 from morphLib import findSandBarAndTrough1D
+from shortestPath import shortestPath
 
 xBounds = [0,800]
 yBounds = [0, 1600]
@@ -44,8 +45,7 @@ for tt in range(data['time'].shape[0]):
         # print('done Profile {}'.format(data['yFRF'][pp]))
     ############################################################################################################################
     plt.ioff()
-
-    plt.figure();
+    plt.figure()
     plt.pcolormesh(data['xFRF'], data['yFRF'], data['elevation'][tt])
     for yy, peaks in enumerate(xPeak):
         if peaks is not None:

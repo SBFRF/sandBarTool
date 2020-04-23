@@ -7,14 +7,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy import interpolate
 from matplotlib import patches as mpatches
-
+from morphLib import findSandBarAndTrough1D
 #######################################################################################################################
 meanPickleName = 'meanSandbarProfile.pickle'
-profileNumber = 1  # 1097
+profileNumber = 1097  # 1097
 crossShoreMax = 1000  # how far do we want to look in cross-shore
 minPoints4Survey = 10
 
-go = getDataFRF.getObs(DT.datetime(1990, 5, 1), DT.datetime(2019, 11, 1))
+go = getDataFRF.getObs(DT.datetime(1975, 5, 1), DT.datetime(2019, 11, 1))
 survey = go.getBathyTransectFromNC(forceReturnAll=True)
 NorthIdx = survey['profileNumber'] == profileNumber
 # isolate data for North-side line only
@@ -42,12 +42,12 @@ for NN, uniqueSurveyNumber in enumerate(UniqueSurveyNumbersNorth):
                                      bounds_error=False, kind='linear', fill_value='nan')
         zOutNorth[NN] = tempf(xOut)
 
+plt.ioff()
 fig = plt.figure(figsize=(8,10))
 ax1 = plt.subplot()
-mesh = ax1.pcolormesh(xOut[:800], tOut, zOutNorth[:,:800])# , cmap='RdBu', norm=(MidpointNormalize(midpoint=0)))
+mesh = ax1.pcolormesh(xOut[:800], tOut, zOutNorth[:,:800]) # , cmap='RdBu', norm=(MidpointNormalize(midpoint=0)))
 plt.colorbar(mesh)
 # notice bar migration patterns
-
 
 meanProfile = np.nanmean(zOutNorth, axis=0)
 out = {'meanProfile': meanProfile,
@@ -66,6 +66,7 @@ for tt in range(zOutNorth.shape[0]):
     bathyX = xOut[~np.isnan(zOutNorth[tt])]
     if bathy[~np.isnan(bathy)].any():
         fname = "/home/spike/repos/sandbarTool/sandBarImages/BarId_{}.png".format(tOut[tt].strftime("%Y%m%d"))
+        print(fname)
         xFRFbar, xFRFtrough = findSandBarAndTrough1D(bathyX, bathy, plotFname=fname, smoothLengthScale=50, profileTrend=meanProfile[np.in1d(xOut, bathyX)])
         if xFRFbar is not None:
             for sandbarX in xFRFbar:
