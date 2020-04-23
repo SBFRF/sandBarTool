@@ -14,4 +14,8 @@ To identify Troughs:
  
  plans: 
   - take the 2D grid with ID'd sandbars and troughs, run an alongshore filter to remove cross-shore noise
+  - current work is working to utilize geomorphons capability in GRASS GIS package 
+ 
+ REFRENCES: 
+  Jasiewicz, Jarosław, and Tomasz F. Stepinski. "Geomorphons—a pattern recognition approach to classification and mapping of landforms." Geomorphology 182 (2013): 147-156.
   
